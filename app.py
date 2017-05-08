@@ -88,10 +88,9 @@ class Store(object):
             db.session.add(cart)
             db.session.commit()
 
-        # if product's inventory does not exceed the quantity adding to cart,
+        # if product's inventory is greater than zero,
         # create an instance of cart_product
-        if product.available_inventory >= quantity:
-
+        if product.available_inventory > 0:
             cart_product = CartProduct(product_id=product.product_id,
                                        cart_id=cart.cart_id,
                                        quantity=quantity)
@@ -150,7 +149,9 @@ class Store(object):
                 if product.quantity <= product.product.available_inventory:
                     product.product.available_inventory -= product.quantity
                 else:
-                    print "{} is out of stock. Sorry!".format(product.product.title)
+                    print "Quantity requested for {} exceeds the inventory. Sorry!".format(product.product.title)
+                    self.update_quantity_in_cart(user, product, product.product.available_inventory)
+                    return
 
             # mark cart as complete and add checkout timestamp
             user_cart.complete = True
