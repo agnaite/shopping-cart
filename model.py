@@ -13,10 +13,6 @@ class User(db.Model):
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     email = db.Column(db.String(64), nullable=False, unique=True)
-    # make secure!
-    password = db.Column(db.String(64), nullable=False)
-    zipcode = db.Column(db.String(15), nullable=True)
-    # payment info?
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -25,12 +21,15 @@ class User(db.Model):
 
 
 class Cart(db.Model):
-    """A shopping cart"""
+    """An cart and its state."""
 
     __tablename__ = "carts"
 
     cart_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.user_id"))
+    cart_created = db.Column(db.DateTime)
+    cart_completed = db.Column(db.DateTime)
+    complete = db.Column(db.Boolean)
 
     # Define relationship to user
     user = db.relationship("User",
@@ -43,7 +42,7 @@ class Product(db.Model):
     __tablename__ = "products"
 
     product_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    price = db.Column(db.Float, precision=2)
+    price = db.Column(db.Float(precision=2))
     title = db.Column(db.String(255), nullable=False)
     available_inventory = db.Column(db.Integer, nullable=False)
 
@@ -56,6 +55,7 @@ class CartProduct(db.Model):
     cart_product_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey("products.product_id"))
     cart_id = db.Column(db.Integer, db.ForeignKey("carts.cart_id"))
+    quantity = db.Column(db.Integer, nullable=False)
 
     # Define relationship to user
     product = db.relationship("Product",
@@ -65,17 +65,13 @@ class CartProduct(db.Model):
                            backref=db.backref("cart_products", order_by=cart_product_id))
 
 
-def example_data():
-    pass
-
 ####################################################################
 # Helper functions
-
 
 def connect_to_db(app):
     """Connect the database to our Flask app."""
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///shopping_cart'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///store'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.app = app
     db.init_app(app)
@@ -87,7 +83,6 @@ if __name__ == "__main__":
     connect_to_db(app)
 
     # Create tables and some sample data
-    # db.create_all()
-    example_data()
+    db.create_all()
 
     print "Connected to DB."
