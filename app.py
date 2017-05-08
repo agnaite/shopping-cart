@@ -9,7 +9,7 @@ class Store(object):
     """A store"""
 
     def add_user(self, email):
-        """Add user to the database."""
+        """Add User to the database."""
 
         try:
             user = User(email=email)
@@ -21,7 +21,7 @@ class Store(object):
             print "User already exists."
 
     def add_product(self, title, price, available_inventory):
-        """Add product to the database"""
+        """Add Product to the database"""
 
         product = Product(title=title,
                           price=price,
@@ -44,8 +44,14 @@ class Store(object):
                                                         product.available_inventory,
                                                         product.price)
 
+    def get_products(self):
+        """Return all the Products in inventory."""
+
+        products = Product.query.all()
+        return products
+
     def view_cart(self, user):
-        """List products in user's cart."""
+        """List Products in User's cart."""
 
         cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
         total = 0
@@ -67,7 +73,7 @@ class Store(object):
         print "Total: ${:4,.2f}".format(total)
 
     def get_cart(self, user):
-        """Return list of items in a user's cart."""
+        """Return list of items in a User's Cart."""
 
         cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
 
@@ -75,7 +81,7 @@ class Store(object):
             return cart.cart_products
 
     def add_to_cart(self, user, product, quantity):
-        """Add product to cart."""
+        """Add Product to Cart."""
 
         cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
 
@@ -102,7 +108,7 @@ class Store(object):
             print "Out of stock."
 
     def remove_from_cart(self, user, product):
-        """Remove product from cart."""
+        """Remove Product from Cart."""
 
         # get the items in user's cart
         user_cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
@@ -121,7 +127,7 @@ class Store(object):
             print "Your cart is empty."
 
     def update_quantity_in_cart(self, user, product, new_quantity):
-        """Update the quantity of a product in user's cart."""
+        """Update the quantity of a Product in User's Cart."""
 
         user_cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
         if user_cart:
@@ -136,7 +142,7 @@ class Store(object):
                 print "Product not found or quantity requested exceeds product's inventory."
 
     def checkout_cart(self, user):
-        """Checkout cart_products and mark cart as complete."""
+        """Checkout cart_products and mark Cart as complete."""
 
         user_cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
 
@@ -162,7 +168,7 @@ class Store(object):
             print "Your cart is empty."
 
     def view_purchase_history(self, user):
-        """Display all completed orders for a user."""
+        """Display all completed orders for a User."""
 
         completed_orders = Cart.query.filter_by(user_id=user.user_id, complete=True).all()
 

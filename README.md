@@ -57,6 +57,7 @@ All methods below will be called on a `Store()` instance.
 * `def add_user(email)`: Adds a User to the database.
 * `def add_product(title, price, available_inventory)`: Adds a Product to the database.
 * `def view_products()`: Prints all the available Products.
+* `def get_products()`: Returns all the available Products.
 * `def view_cart(user)`: Prints the Cart contents for a specific User object passed in.
 * `def get_cart(user)`: Returns a list of CartProducts for a specific User object passed in.
 * `def add_to_cart(user, product, quantity)`: Adds a Product to a User's cart. Takes in a User object, a Product object, and quantity.
