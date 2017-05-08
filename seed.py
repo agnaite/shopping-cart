@@ -50,5 +50,5 @@ def load_products():
 if __name__ == "__main__":
     connect_to_db(app)
 
-    # load_users()
+    load_users()
     load_products()
