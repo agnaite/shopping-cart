@@ -46,6 +46,11 @@ class Product(db.Model):
     title = db.Column(db.String(255), nullable=False)
     available_inventory = db.Column(db.Integer, nullable=False)
 
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Product product_id=%s title=%s>" % (self.product_id, self.title)
+
 
 class CartProduct(db.Model):
     """A product in a cart."""
@@ -57,12 +62,20 @@ class CartProduct(db.Model):
     cart_id = db.Column(db.Integer, db.ForeignKey("carts.cart_id"))
     quantity = db.Column(db.Integer, nullable=False)
 
-    # Define relationship to user
+    # Define relationship to product
     product = db.relationship("Product",
                               backref=db.backref("cart_products", order_by=cart_product_id))
     # Define relationship to cart
     cart = db.relationship("Cart",
                            backref=db.backref("cart_products", order_by=cart_product_id))
+
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<CartProduct cart_product_id=%s cart_id=%s user_id=%s title=%s>" % (self.cart_product_id,
+                                                                                    self.cart_id,
+                                                                                    self.cart.user_id,
+                                                                                    self.product.title)
 
 
 ####################################################################

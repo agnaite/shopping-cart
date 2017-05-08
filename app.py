@@ -11,11 +11,14 @@ class Store(object):
     def add_user(self, email):
         """Add user to the database."""
 
-        user = User(email=email)
-        db.session.add(user)
-        db.session.commit()
+        try:
+            user = User(email=email)
+            db.session.add(user)
+            db.session.commit()
 
-        print "User added."
+            print "User added."
+        except:
+            print "User already exists."
 
     def add_product(self, title, price, available_inventory):
         """Add product to the database"""
