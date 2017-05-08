@@ -42,7 +42,7 @@ $ python seed.py
 ```
 Run the app from the command line in interactive mode.
 ```
-$ python -i server.py
+$ python -i app.py
 ```
 <!-- 
 ## Running the tests
