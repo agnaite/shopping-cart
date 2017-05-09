@@ -54,8 +54,8 @@ Explain how to run the automated tests for this system
 
 All methods below will be called on a `Store()` instance.
 
-* `def add_user(email)`: Adds a User to the database.
-* `def add_product(title, price, available_inventory)`: Adds a Product to the database.
+* `def add_user(email)`: Adds a User to the database. Returns the User object.
+* `def add_product(title, price, available_inventory)`: Adds a Product to the database. Returns the Product object.
 * `def view_products()`: Prints all the available Products.
 * `def get_products()`: Returns all the available Products.
 * `def view_cart(user)`: Prints the Cart contents for a specific User object passed in.
