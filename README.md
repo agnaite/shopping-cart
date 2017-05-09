@@ -2,7 +2,7 @@
 
 A simple shopping cart system.
 
-## Getting Started
+## Getting started
 
 These instructions will get you a copy of the project up and running on your local machine for development purposes.
 
@@ -50,22 +50,22 @@ $ python -i app.py
 Explain how to run the automated tests for this system
  -->
 
-### Store Methods
+### Store methods
 
 All methods below will be called on a `Store()` instance.
 
-* `def add_user(email)`: Adds a User to the database. Returns the User object.
-* `def add_product(title, price, available_inventory)`: Adds a Product to the database. Returns the Product object.
-* `def view_products()`: Prints all the available Products.
-* `def get_products()`: Returns all the available Products.
-* `def view_cart(user)`: Prints the Cart contents for a specific User object passed in.
-* `def get_cart(user)`: Returns a list of CartProducts for a specific User object passed in.
-* `def add_to_cart(user, product, quantity)`: Adds a Product to a User's cart. Takes in a User object, a Product object, and quantity.
-* `def remove_from_cart(user, product)`: Removes a Product from a User's Cart. Takes in a User and a Product object.
-* `def update_quantity_in_cart(user, product, new_quantity)`: Updates the quantity for a specific Product in a User's cart. Takes in a User object, a Product object, and the new quantity.
-* `def checkout_cart(user)`: Completes purchase and checks out a specific User's cart. Cart gets marked as complete. Takes in a User object.
-* `def view_purchase_history(user)`: Prints all the completed orders for a specific User. Takes in a User object.
-* `def get_purchase_history(user)`: Returns a list of all the Cart objects for a specific User that have been completed. Takes in a User object.
+* `add_user(email)`: Adds a User to the database. Returns the User object.
+* `add_product(title, price, available_inventory)`: Adds a Product to the database. Returns the Product object.
+* `view_products()`: Prints all the available Products.
+* `get_products()`: Returns all the available Products.
+* `view_cart(user)`: Prints the Cart contents for a specific User object passed in.
+* `get_cart(user)`: Returns a list of CartProducts for a specific User object passed in.
+* `add_to_cart(user, product, quantity)`: Adds a Product to a User's cart. Takes in a User object, a Product object, and quantity.
+* `remove_from_cart(user, product)`: Removes a Product from a User's Cart. Takes in a User and a Product object.
+* `update_quantity_in_cart(user, product, new_quantity)`: Updates the quantity for a specific Product in a User's cart. Takes in a User object, a Product object, and the new quantity.
+* `checkout_cart(user)`: Completes purchase and checks out a specific User's cart. Cart gets marked as complete. Takes in a User object.
+* `view_purchase_history(user)`: Prints all the completed orders for a specific User. Takes in a User object.
+* `get_purchase_history(user)`: Returns a list of all the Cart objects for a specific User that have been completed. Takes in a User object.
 
 ### Basic usage example
 
