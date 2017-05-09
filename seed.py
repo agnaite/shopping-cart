@@ -7,8 +7,6 @@ def load_users():
 
     print "Users"
 
-    User.query.delete()
-
     for i, row in enumerate(open("data/mock_user_data.csv")):
         row = row.rstrip()
         user_id, email, password = row.split(",")
@@ -28,8 +26,6 @@ def load_products():
     """Load products from product_mock_data into database."""
 
     print "Products"
-
-    # Product.query.delete()
 
     for i, row in enumerate(open("data/mock_product_data.csv")):
         row = row.rstrip()
