@@ -17,6 +17,7 @@ class Store(object):
             db.session.commit()
 
             print "User added."
+            return user
         except:
             print "User already exists."
 
@@ -31,6 +32,7 @@ class Store(object):
         db.session.commit()
 
         print "Product added."
+        return product
 
     def view_products(self):
         """Print all the products in inventory."""
