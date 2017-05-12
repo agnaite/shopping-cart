@@ -44,11 +44,17 @@ Run the app from the command line in interactive mode.
 ```
 $ python -i app.py
 ```
-<!-- 
-## Running the tests
 
-Explain how to run the automated tests for this system
- -->
+### Running the tests
+
+Create database "testdb".
+```
+$ createdb testdb
+```
+Run the tests script from the command line.
+```
+$ python tests.py
+```
 
 ### Store methods
 
