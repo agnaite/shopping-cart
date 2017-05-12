@@ -147,8 +147,12 @@ class Store(object):
                 product_to_update.quantity = new_quantity
                 db.session.commit()
                 print "Product quantity updated."
+                return product_to_update
             else:
                 print "Product not found or quantity requested exceeds product's inventory."
+                return None
+
+        return None
 
     def checkout_cart(self, user):
         """Checkout cart_products and mark Cart as complete."""
@@ -166,15 +170,17 @@ class Store(object):
                 else:
                     print "Quantity requested for {} exceeds the inventory. Sorry!".format(product.product.title)
                     self.update_quantity_in_cart(user, product, product.product.available_inventory)
-                    return
+                    return user_cart
 
             # mark cart as complete and add checkout timestamp
             user_cart.complete = True
             user_cart.cart_completed = datetime.now()
             db.session.commit()
             print "Thank you for shopping."
+            return user_cart.cart_products
         else:
             print "Your cart is empty."
+            return None
 
     def view_purchase_history(self, user):
         """Display all completed orders for a User."""

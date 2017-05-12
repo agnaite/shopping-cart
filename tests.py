@@ -2,6 +2,10 @@ import unittest
 from app import app, Store
 from model import connect_to_db, db, User, Product
 from seed import load_users, load_products
+from coverage import coverage
+
+cov = coverage(branch=True, include=['app.py'])
+cov.start()
 
 
 class ShoppingCartUnitTestCase(unittest.TestCase):
@@ -113,6 +117,81 @@ class ShoppingCartUnitTestCase(unittest.TestCase):
         cart_product = self.store.add_to_cart(user, product_0, 1)
         self.assertEqual(cart_product.product.title, Product.query.get(1).title)
 
-if __name__ == "__main__":
+    def test_update_quantity_in_cart(self):
+        """Test updating quantity in cart."""
 
-    unittest.main()
+        user = User.query.get(1)
+        product_0 = Product.query.get(1)
+        product_1 = Product.query.get(2)
+
+        # if cart is empty, returns None
+        updated_product = self.store.update_quantity_in_cart(user, product_0, 2)
+        self.assertIsNone(updated_product)
+
+        # if product to be updated is not found in cart, return None
+        self.store.add_to_cart(user, product_1, 2)
+        updated_product = self.store.update_quantity_in_cart(user, product_0, 2)
+        self.assertIsNone(updated_product)
+
+        # if product is found but quantity exceeds inventory, return None
+        updated_product = self.store.update_quantity_in_cart(user, product_1, 51)
+        self.assertIsNone(updated_product)
+
+        # if product is found and quantity is legal, update quantity
+        new_quantity = 5
+        updated_product = self.store.update_quantity_in_cart(user, product_1, new_quantity)
+        self.assertEqual(new_quantity, updated_product.quantity)
+
+    def test_checkout_cart(self):
+        """Test checking out user cart."""
+
+        user = User.query.get(1)
+        product_1 = Product.query.get(2)
+
+        # if cart is empty, returns None
+        user_cart = self.store.checkout_cart(user)
+        self.assertIsNone(user_cart)
+
+        # if cartProduct quantity exceeds available inventory, update the quantity
+        # to the max inventory available and return incomplete userCart
+        self.store.add_to_cart(user, product_1, 51)
+        user_cart = self.store.checkout_cart(user)
+        self.assertEqual(user_cart.cart_products[0].quantity, 50)
+        self.assertFalse(user_cart.complete)
+
+        # if cart contains products and each product's quantity is below
+        # available inventory, mark cart as complete and return all the purchased cartProducts
+        user_cart = self.store.checkout_cart(user)
+        self.assertEqual(user_cart[0].quantity, 50)
+        self.assertTrue(user_cart[0].cart.complete)
+
+    def test_get_purchase_history(self):
+        """Test getting a user's purchase history."""
+
+        user = User.query.get(1)
+        product_0 = Product.query.get(1)
+
+        # if user has no completed orders, return empty list
+        purchase_history = self.store.get_purchase_history(user)
+        self.assertEqual(purchase_history, [])
+
+        # if user has completed orders, get back a list of completed carts
+        self.store.add_to_cart(user, product_0, 1)
+        self.store.checkout_cart(user)
+        purchase_history = self.store.get_purchase_history(user)
+        self.assertEqual(len(purchase_history), 1)
+
+
+if __name__ == '__main__':
+
+    try:
+        unittest.main()
+    except:
+        pass
+
+    cov.stop()
+    cov.save()
+    print "\n\nCoverage Report:\n"
+    cov.report()
+    print "\n"
+    cov.erase()
