@@ -20,6 +20,7 @@ class Store(object):
             return user
         except:
             print "User already exists."
+            return None
 
     def add_product(self, title, price, available_inventory):
         """Add Product to the database"""
