@@ -107,8 +107,11 @@ class Store(object):
             db.session.add(cart_product)
             db.session.commit()
             print "Product added."
+            return cart_product
+
         else:
             print "Out of stock."
+            return None
 
     def remove_from_cart(self, user, product):
         """Remove Product from Cart."""
@@ -124,10 +127,13 @@ class Store(object):
                 db.session.delete(product_to_remove)
                 db.session.commit()
                 print "Product removed from cart."
+                return product_to_remove
             else:
                 print "Product not found."
+                return None
         else:
             print "Your cart is empty."
+            return None
 
     def update_quantity_in_cart(self, user, product, new_quantity):
         """Update the quantity of a Product in User's Cart."""
