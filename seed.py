@@ -5,7 +5,7 @@ from app import app
 def load_users():
     """Load users from user_mock_data into database."""
 
-    print "Users"
+    print "Loading Users"
 
     for i, row in enumerate(open("data/mock_user_data.csv")):
         row = row.rstrip()
@@ -15,17 +15,13 @@ def load_users():
 
         db.session.add(user)
 
-        # provide some sense of progress
-        if i % 100 == 0:
-            print i
-
     db.session.commit()
 
 
 def load_products():
     """Load products from product_mock_data into database."""
 
-    print "Products"
+    print "Loading Products"
 
     for i, row in enumerate(open("data/mock_product_data.csv")):
         row = row.rstrip()
@@ -36,10 +32,6 @@ def load_products():
                           available_inventory=inventory)
 
         db.session.add(product)
-
-        # provide some sense of progress
-        if i % 100 == 0:
-            print i
 
     db.session.commit()
 

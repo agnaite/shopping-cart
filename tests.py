@@ -1,6 +1,6 @@
 import unittest
 from app import app, Store
-from model import connect_to_db, db, User
+from model import connect_to_db, db, User, Product
 from seed import load_users, load_products
 
 
@@ -30,6 +30,8 @@ class ShoppingCartUnitTestCase(unittest.TestCase):
         db.session.close()
         db.drop_all()
 
+        print "Dropping testdb."
+
     def test_add_user(self):
         """Test adding User."""
 
@@ -39,6 +41,22 @@ class ShoppingCartUnitTestCase(unittest.TestCase):
 
         # does not add a user if email in database
         self.assertIsNone(self.store.add_user("taylor@everlane.com"))
+
+    def test_add_product(self):
+        """Test adding Product."""
+
+        # adds new product OK
+        self.store.add_product("The Elements Anorak", 148, 100)
+        self.assertTrue(Product.query.filter_by(title="The Elements Anorak"))
+
+    def test_get_products(self):
+        """Test getting all the products from database."""
+
+        # method .get_products returns all the products in the Product table
+        products = self.store.get_products()
+        self.assertEqual(len(products), Product.query.count())
+
+    
 
 
 if __name__ == "__main__":
