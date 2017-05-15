@@ -19,8 +19,8 @@ class Store(object):
             db.session.add(user)
             db.session.commit()
         except exc.IntegrityError:
-            print "User already exists."
             db.session.rollback()
+            print "User already exists."
             return None
 
         print "User added."
