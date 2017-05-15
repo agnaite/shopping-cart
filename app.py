@@ -1,6 +1,8 @@
 from flask import Flask
 from model import connect_to_db, db, User, Product, Cart, CartProduct
 from datetime import datetime
+from sqlalchemy import exc
+
 
 app = Flask(__name__)
 
@@ -11,16 +13,18 @@ class Store(object):
     def add_user(self, email):
         """Add User to the database."""
 
+        user = User(email=email)
+
         try:
-            user = User(email=email)
             db.session.add(user)
             db.session.commit()
-
-            print "User added."
-            return user
-        except:
+        except exc.IntegrityError:
             print "User already exists."
+            db.session.rollback()
             return None
+
+        print "User added."
+        return user
 
     def add_product(self, title, price, available_inventory):
         """Add Product to the database"""
