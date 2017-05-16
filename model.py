@@ -35,6 +35,13 @@ class Cart(db.Model):
     user = db.relationship("User",
                            backref=db.backref("carts", order_by=cart_id))
 
+    def __repr__(self):
+        """Provide helpful representation when printed."""
+
+        return "<Cart cart_id=%s user_id=%s is complete=%s>" % (self.cart_id,
+                                                                self.user_id,
+                                                                self.complete)
+
 
 class Product(db.Model):
     """A product"""
