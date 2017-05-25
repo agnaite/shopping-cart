@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import exc
 
 db = SQLAlchemy()
 
@@ -13,6 +14,20 @@ class User(db.Model):
 
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     email = db.Column(db.String(64), nullable=False, unique=True)
+
+    def create(self, email):
+        """Add new User to database."""
+
+        user = User(email=email)
+
+        try:
+            db.session.add(user)
+            db.session.commit()
+        except exc.IntegrityError:
+            db.session.rollback()
+            return None
+
+        return user
 
     def __repr__(self):
         """Provide helpful representation when printed."""
@@ -53,6 +68,24 @@ class Product(db.Model):
     title = db.Column(db.String(255), nullable=False)
     available_inventory = db.Column(db.Integer, nullable=False)
 
+    def create(self, title, price, available_inventory):
+        """Create new product."""
+
+        product = Product(title=title,
+                          price=price,
+                          available_inventory=available_inventory)
+
+        db.session.add(product)
+        db.session.commit()
+
+        return product
+
+    @classmethod
+    def view_all(self):
+        """Return all products"""
+
+        return Product.query.all()
+
     def __repr__(self):
         """Provide helpful representation when printed."""
 
@@ -68,6 +101,8 @@ class CartProduct(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey("products.product_id"))
     cart_id = db.Column(db.Integer, db.ForeignKey("carts.cart_id"))
     quantity = db.Column(db.Integer, nullable=False)
+    tax = db.Column(db.Float, nullable=False)
+    price = db.Column(db.Float, nullable=False)
 
     # Define relationship to product
     product = db.relationship("Product",
@@ -99,7 +134,7 @@ def connect_to_db(app, db_uri='postgresql:///store'):
 
 if __name__ == "__main__":
 
-    from app import app
+    from controller import app
     connect_to_db(app)
 
     # Create tables and some sample data
