@@ -1,6 +1,7 @@
 class UsersView(object):
     """The User View."""
 
+    @classmethod
     def create(self, user):
         """Display new user."""
 
@@ -21,6 +22,7 @@ class ProductsView(object):
                                                         product.available_inventory,
                                                         product.price)
 
+    @classmethod
     def create(self, product):
         """Display new product."""
 

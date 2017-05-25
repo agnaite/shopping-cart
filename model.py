@@ -15,6 +15,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     email = db.Column(db.String(64), nullable=False, unique=True)
 
+    @classmethod
     def create(self, email):
         """Add new User to database."""
 
@@ -68,6 +69,7 @@ class Product(db.Model):
     title = db.Column(db.String(255), nullable=False)
     available_inventory = db.Column(db.Integer, nullable=False)
 
+    @classmethod
     def create(self, title, price, available_inventory):
         """Create new product."""
 

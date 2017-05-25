@@ -9,10 +9,7 @@ app = Flask(__name__)
 class UsersController(object):
     """Users Controller."""
 
-    def __init__(self):
-
-        UsersView = UsersView()
-
+    @classmethod
     def create(self, email):
         """Create new User."""
 
@@ -30,6 +27,7 @@ class ProductsController(object):
         products = Product.view_all()
         ProductsView.index(products)
 
+    @classmethod
     def create(self, title, price, available_inventory):
         """Create new Product."""
 
