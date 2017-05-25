@@ -1,5 +1,5 @@
 from model import connect_to_db, db, User, Product, Cart, CartProduct
-from view import ProductsView
+from view import ProductsView, UsersView
 from flask import Flask
 
 app = Flask(__name__)
@@ -33,3 +33,10 @@ class ProductsController(object):
 
         new_product = Product.create(title, price, available_inventory)
         ProductsView.create(new_product)
+
+class CartProductsController(object):
+    """CartProduct Controller."""
+
+    @classmethod
+    def index(self):
+        pass

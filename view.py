@@ -5,7 +5,10 @@ class UsersView(object):
     def create(self, user):
         """Display new user."""
 
-        print "User with email {} added.".format(user.email)
+        if user:
+            print "User with email {} added.".format(user.email)
+        else:
+            print "Error adding user."
 
 
 class ProductsView(object):

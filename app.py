@@ -42,13 +42,13 @@ class Store(object):
     #
     #     print "Total: ${:4,.2f}".format(total)
     #
-    # def get_cart(self, user):
-    #     """Return list of items in a User's Cart."""
-    #
-    #     cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
-    #
-    #     if cart:
-    #         return cart.cart_products
+    def get_cart(self, user):
+        """Return list of items in a User's Cart."""
+
+        cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
+
+        if cart:
+            return cart.cart_products
     #
     # def add_to_cart(self, user, product, quantity):
     #     """Add Product to Cart."""
