@@ -1,5 +1,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import exc
+from datetime import datetime
+import helpers
 
 db = SQLAlchemy()
 
@@ -112,6 +114,45 @@ class CartProduct(db.Model):
     # Define relationship to cart
     cart = db.relationship("Cart",
                            backref=db.backref("cart_products", order_by=cart_product_id))
+
+    @classmethod
+    def index(self, user):
+        """Return products in Cart."""
+
+        cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
+
+        if cart:
+            return cart.cart_products
+
+        return None
+
+    @classmethod
+    def create(self, user, product, quantity):
+        """Add CartProduct to database."""
+
+        cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
+
+        if not cart:
+            cart = Cart(user_id=user.user_id,
+                        cart_created=datetime.now(),
+                        complete=False)
+
+            db.session.add(cart)
+            db.session.commit()
+
+        if product.available_inventory > 0:
+            cart_product = CartProduct(product_id=product.product_id,
+                                       cart_id=cart.cart_id,
+                                       quantity=quantity,
+                                       price=product.price,
+                                       tax=helpers.get_tax_rate())
+
+            db.session.add(cart_product)
+            db.session.commit()
+
+            return cart_product
+        else:
+            return None
 
     def __repr__(self):
         """Provide helpful representation when printed."""

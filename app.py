@@ -1,7 +1,12 @@
-from controller import app, ProductsController, UsersController
+from controller import app, ProductsController, UsersController, CartProductsController
 
 class Store(object):
     """A store"""
+
+    def get_user(self, email):
+        """Retrieve User."""
+
+        return UsersController.show(email)
 
     def add_user(self, email):
         """Add User to the database."""
@@ -18,69 +23,21 @@ class Store(object):
 
         return ProductsController.index()
 
-    # def view_cart(self, user):
-    #     """List Products in User's cart."""
-    #
-    #     cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
-    #     total = 0
-    #
-    #     if cart:
-    #         for item in cart.cart_products:
-    #
-    #             product = Product.query.get(item.product_id)
-    #             subtotal = item.price * item.quantity
-    #             tax = subtotal * item.tax
-    #             total += subtotal + tax
-    #
-    #             print "[{}] {} ({}): ${:4,.2f}.".format(product.product_id,
-    #                                                     product.title,
-    #                                                     item.quantity,
-    #                                                     subtotal,
-    #                                                     tax)
-    #     else:
-    #         print "Your cart is empty."
-    #
-    #     print "Total: ${:4,.2f}".format(total)
-    #
+    def get_product(self, title):
+        """Get a product based on title."""
+
+        return ProductsController.show(title)
+
     def get_cart(self, user):
         """Return list of items in a User's Cart."""
 
-        cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
+        return CartProductsController.index(user)
 
-        if cart:
-            return cart.cart_products
-    #
-    # def add_to_cart(self, user, product, quantity):
-    #     """Add Product to Cart."""
-    #
-    #     cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
-    #
-    #     # if user does not have an active cart, make a cart
-    #     if not cart:
-    #         cart = Cart(user_id=user.user_id,
-    #                     cart_created=datetime.now(),
-    #                     complete=False)
-    #
-    #         db.session.add(cart)
-    #         db.session.commit()
-    #
-    #     # if product's inventory is greater than zero,
-    #     # create an instance of cart_product
-    #     if product.available_inventory > 0:
-    #         cart_product = CartProduct(product_id=product.product_id,
-    #                                    cart_id=cart.cart_id,
-    #                                    quantity=quantity,
-    #                                    price=product.price,
-    #                                    tax=helpers.get_tax_rate())
-    #
-    #         db.session.add(cart_product)
-    #         db.session.commit()
-    #         print "Product added."
-    #         return cart_product
-    #
-    #     else:
-    #         print "Out of stock."
-    #         return None
+    def add_to_cart(self, user, product, quantity):
+        """Add Product to Cart."""
+
+        return CartProductsController.create(user, product, quantity)
+
     #
     # def remove_from_cart(self, user, product):
     #     """Remove Product from Cart."""
@@ -183,5 +140,7 @@ if __name__ == "__main__":
 
     # create an instance of store
     store = Store()
+    user = store.get_user("agne@gmail.com")
+    product = store.get_product("The Cotton Crew")
 
     print "Use 'store' to invoke methods."

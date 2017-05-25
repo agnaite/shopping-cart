@@ -30,3 +30,40 @@ class ProductsView(object):
         """Display new product."""
 
         print "{} added".format(product.name)
+
+class CartProductsView(object):
+    """The CartProduct View."""
+
+    @classmethod
+    def index(self, cart_products):
+        """Display all Cart products."""
+
+        total = 0
+        output = "[{}] {} ({}): ${:4,.2f}, tax: ${:4,.2f}."
+
+        if cart_products:
+            for cart_product in cart_products:
+
+                product = cart_product.product
+                subtotal = cart_product.price * cart_product.quantity
+                tax = subtotal * cart_product.tax
+                total += subtotal + tax
+
+                print output.format(product.product_id,
+                                    product.title,
+                                    cart_product.quantity,
+                                    subtotal,
+                                    tax)
+        else:
+            print "Your cart is empty."
+
+        print "Total: ${:4,.2f}".format(total)
+
+    @classmethod
+    def create(self, cart_product):
+        """Display Product added to Cart."""
+
+        if cart_product:
+            print "{} added to cart.".format(cart_product.product.title)
+        else:
+            print "{} is out of stock.".format(cart_product.product.title)

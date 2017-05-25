@@ -1,5 +1,5 @@
 from model import connect_to_db, db, User, Product, Cart, CartProduct
-from view import ProductsView, UsersView
+from view import ProductsView, UsersView, CartProductsView
 from flask import Flask
 
 app = Flask(__name__)
@@ -8,6 +8,12 @@ app = Flask(__name__)
 
 class UsersController(object):
     """Users Controller."""
+
+    @classmethod
+    def show(self, email):
+        """Get a User based on email address."""
+
+        return User.query.filter_by(email=email).first()
 
     @classmethod
     def create(self, email):
@@ -28,6 +34,12 @@ class ProductsController(object):
         ProductsView.index(products)
 
     @classmethod
+    def show(self, title):
+        """Get Product based on name."""
+
+        return Product.query.filter_by(title=title).first()
+
+    @classmethod
     def create(self, title, price, available_inventory):
         """Create new Product."""
 
@@ -38,5 +50,15 @@ class CartProductsController(object):
     """CartProduct Controller."""
 
     @classmethod
-    def index(self):
-        pass
+    def index(self, user):
+        """View products in Cart."""
+
+        cart_products = CartProduct.index(user)
+        CartProductsView.index(cart_products)
+
+    @classmethod
+    def create(self, user, product, quantity):
+        """Add Product to Cart."""
+
+        cart_product = CartProduct.create(user, product, quantity)
+        CartProductsView.create(cart_product)
