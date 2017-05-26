@@ -18,9 +18,11 @@ class ProductsView(object):
     def index(self, products):
         """Display all products."""
 
+        output = "[{}] {} ({}): ${:4,.2f}."
+
         for product in products:
             if product.available_inventory > 0:
-                print "[{}] {} ({}): ${:4,.2f}.".format(product.product_id,
+                print output.format(product.product_id,
                                                         product.title,
                                                         product.available_inventory,
                                                         product.price)
@@ -102,6 +104,8 @@ class CartProductsView(object):
     def show_completed(self, orders):
         """Display User's completed orders."""
 
+        output = "[{}] {}: ${:4,.2f}"
+
         if orders:
             for order in orders:
                 print '-' * 36
@@ -109,7 +113,7 @@ class CartProductsView(object):
                 print "Order date: {}".format(order.cart_completed.strftime("%x %X"))
 
                 for product in order.cart_products:
-                    print "[{}] {}: ${:4,.2f}".format(product.product_id,
+                    print output.format(product.product_id,
                                                       product.product.title,
                                                       product.product.price * product.quantity)
         else:
