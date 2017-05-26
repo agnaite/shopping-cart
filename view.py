@@ -85,17 +85,32 @@ class CartProductsView(object):
             print "{}'s new quantity has been updated to {}.".format(cart_product.product.title,
                                                                      cart_product.quantity)
         else:
-            print "Could not update {} quantity.".format(cart_product.product.title)
+            print "Could not update quantity."
 
     @classmethod
     def complete(self, cart):
         """Display checkout results."""
 
-        if cart:
-            if type(cart) == 'InstrumentedList':
-                print "Thank you for shopping."
-            else:
-                print "Quantity for an item requested exceeds the inventory. Your cart has been updated."
-                self.index(cart.cart_products)
+        if cart == "error":
+            print "Quantity for an item requested exceeds the inventory. Your cart has been updated."
+        elif cart:
+            print "Thank you for shopping."
         else:
             print "Your cart is empty."
+
+    @classmethod
+    def show_completed(self, orders):
+        """Display User's completed orders."""
+
+        if orders:
+            for order in orders:
+                print '-' * 36
+                print "Order ID: {}".format(order.cart_id)
+                print "Order date: {}".format(order.cart_completed.strftime("%x %X"))
+
+                for product in order.cart_products:
+                    print "[{}] {}: ${:4,.2f}".format(product.product_id,
+                                                      product.product.title,
+                                                      product.product.price * product.quantity)
+        else:
+            print "User has no orders."

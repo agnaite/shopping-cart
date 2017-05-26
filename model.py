@@ -205,15 +205,21 @@ class CartProduct(db.Model):
                     product.product.available_inventory -= product.quantity
                 else:
                     self.update(user, product, product.product.available_inventory)
-                    return user_cart
+                    return "error"
 
             # mark cart as complete and add checkout timestamp
             user_cart.complete = True
             user_cart.cart_completed = datetime.now()
             db.session.commit()
-            return user_cart.cart_products
+            return user_cart
         else:
             return None
+
+    @classmethod
+    def show_completed(self, user):
+        """Get completed orders for user."""
+
+        return Cart.query.filter_by(user_id=user.user_id, complete=True).all()
 
     def __repr__(self):
         """Provide helpful representation when printed."""

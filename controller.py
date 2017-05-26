@@ -82,3 +82,10 @@ class CartProductsController(object):
 
         cart = CartProduct.complete(user)
         CartProductsView.complete(cart)
+
+    @classmethod
+    def show_completed(self, user):
+        """Get completed orders for a user."""
+
+        orders = CartProduct.show_completed(user)
+        CartProductsView.show_completed(orders)

@@ -52,30 +52,11 @@ class Store(object):
         """Checkout cart_products and mark Cart as complete."""
 
         return CartProductsController.complete(user)
-    #
-    # def view_purchase_history(self, user):
-    #     """Display all completed orders for a User."""
-    #
-    #     completed_orders = Cart.query.filter_by(user_id=user.user_id, complete=True).all()
-    #
-    #     for completed_order in completed_orders:
-    #         print '-' * 36
-    #         print "Order ID: {}".format(completed_order.cart_id)
-    #         print "Order date: {}".format(completed_order.cart_completed.strftime("%x %X"))
-    #
-    #         for product in completed_order.cart_products:
-    #             print "[{}] {}: ${:4,.2f}".format(product.product_id,
-    #                                               product.product.title,
-    #                                               product.product.price * product.quantity)
-    #
-    #     if not completed_orders:
-    #         print "No orders found for {}.".format(user.email)
-    #
-    # def get_purchase_history(self, user):
-    #     """Return list of completed orders."""
-    #
-    #     completed_orders = Cart.query.filter_by(user_id=user.user_id, complete=True).all()
-    #     return completed_orders
+
+    def get_purchase_history(self, user):
+        """Display all completed orders for a User."""
+
+        CartProductsController.show_completed(user)
 
 
 if __name__ == "__main__":
@@ -85,7 +66,7 @@ if __name__ == "__main__":
 
     # create an instance of store
     everlane = Store()
-    agne = everlane.get_user("agne@gmail.com")
+    taylor = everlane.get_user("taylor@everlane.com")
     cotton_crew = everlane.get_product("The Cotton Crew")
 
     print "Use 'everlane' to invoke methods."
