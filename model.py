@@ -154,6 +154,67 @@ class CartProduct(db.Model):
         else:
             return None
 
+    @classmethod
+    def delete(self, user, product):
+
+        # get the items in user's cart
+        user_cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
+
+        if user_cart:
+            # get the product to be removed from user's cart
+            product_to_remove = CartProduct.query.filter_by(cart_id=user_cart.cart_id,
+                                                            product_id=product.product_id).first()
+            if product_to_remove:
+                db.session.delete(product_to_remove)
+                db.session.commit()
+                return product_to_remove
+
+        return None
+
+    @classmethod
+    def update(self, user, product, new_quantity):
+        """Update Product quantity in Cart."""
+
+        user_cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
+
+        if user_cart:
+            # get the product to be updated from user's cart
+            product_to_update = CartProduct.query.filter_by(cart_id=user_cart.cart_id,
+                                                            product_id=product.product_id).first()
+
+            if product_to_update and product_to_update.product.available_inventory >= new_quantity:
+                product_to_update.quantity = new_quantity
+                db.session.commit()
+                return product_to_update
+
+        return None
+
+    @classmethod
+    def complete(self, user):
+        """Mark User's Cart as complete."""
+
+        user_cart = Cart.query.filter_by(user_id=user.user_id, complete=False).first()
+
+        # if there is an active carts that contains products,
+        # iterate over each product in active cart,
+        # check that inventory is still greater than quantity in cart,
+        # and update product's available inventory
+        if user_cart and user_cart.cart_products:
+            for product in user_cart.cart_products:
+                if product.quantity <= product.product.available_inventory:
+                    product.product.available_inventory -= product.quantity
+                else:
+                    self.update(user, product, product.product.available_inventory)
+                    return user_cart
+
+            # mark cart as complete and add checkout timestamp
+            user_cart.complete = True
+            user_cart.cart_completed = datetime.now()
+            db.session.commit()
+            return user_cart.cart_products
+        else:
+            return None
+
     def __repr__(self):
         """Provide helpful representation when printed."""
 

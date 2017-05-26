@@ -3,7 +3,6 @@ from view import ProductsView, UsersView, CartProductsView
 from flask import Flask
 
 app = Flask(__name__)
-# connect_to_db(app)
 
 
 class UsersController(object):
@@ -62,3 +61,24 @@ class CartProductsController(object):
 
         cart_product = CartProduct.create(user, product, quantity)
         CartProductsView.create(cart_product)
+
+    @classmethod
+    def delete(self, user, product):
+        """Delete Product from Cart."""
+
+        cart_product = CartProduct.delete(user, product)
+        CartProductsView.delete(cart_product)
+
+    @classmethod
+    def update(self, user, product, quantity):
+        """Update product quantity in cart."""
+
+        cart_product = CartProduct.update(user, product, quantity)
+        CartProductsView.update(cart_product)
+
+    @classmethod
+    def complete(self, user):
+        """Complete User's Cart."""
+
+        cart = CartProduct.complete(user)
+        CartProductsView.complete(cart)

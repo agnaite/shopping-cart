@@ -66,4 +66,36 @@ class CartProductsView(object):
         if cart_product:
             print "{} added to cart.".format(cart_product.product.title)
         else:
-            print "{} is out of stock.".format(cart_product.product.title)
+            print "Product is out of stock."
+
+    @classmethod
+    def delete(self, cart_product):
+        """Display Product removed from Cart."""
+
+        if cart_product:
+            print "{} removed from cart.".format(cart_product.product.title)
+        else:
+            print "{} was not found in cart.".format(cart_product.product.title)
+
+    @classmethod
+    def update(self, cart_product):
+        """Display updated Product in Cart."""
+
+        if cart_product:
+            print "{}'s new quantity has been updated to {}.".format(cart_product.product.title,
+                                                                     cart_product.quantity)
+        else:
+            print "Could not update {} quantity.".format(cart_product.product.title)
+
+    @classmethod
+    def complete(self, cart):
+        """Display checkout results."""
+
+        if cart:
+            if type(cart) == 'InstrumentedList':
+                print "Thank you for shopping."
+            else:
+                print "Quantity for an item requested exceeds the inventory. Your cart has been updated."
+                self.index(cart.cart_products)
+        else:
+            print "Your cart is empty."
